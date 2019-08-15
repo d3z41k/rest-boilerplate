@@ -24,6 +24,7 @@ func init() {
 	}
 
 	db = conn
+	db.Debug().AutoMigrate(&Account{}, &Contact{})
 }
 
 // GetDB return a descriptor to the DB object
