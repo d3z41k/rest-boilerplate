@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/d3z41k/rest-boilerplate/app"
+	"github.com/d3z41k/rest-boilerplate/controllers"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 )
@@ -23,9 +25,15 @@ func NewRouter() http.Handler {
 	router.Use(middleware.Logger)
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.Timeout(60 * time.Second))
+	router.Use(app.JwtAuthentication) //attach JWT auth middleware
 
 	//Set up root handler
 	router.Get("/", HelloWorld)
+
+	router.Post("/api/user/new", controllers.CreateAccount)
+	router.Post("/api/user/login", controllers.Authenticate)
+	router.Post("/api/contacts/new", controllers.CreateContact)
+	router.Get("/api/contacts", controllers.GetContactsFor)
 
 	return router
 }
