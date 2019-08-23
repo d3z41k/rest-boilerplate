@@ -11,16 +11,16 @@ import (
 
 // NewRouter returns an HTTP handler that implements the routes for the API
 func NewRouter() http.Handler {
-	r := chi.NewRouter()
+	router := chi.NewRouter()
 
 	// Attach JWT auth middleware
-	r.Use(m.JwtAuthentication) 
+	router.Use(m.JwtAuthentication)
 
 	// Register the API routes
-	r.Post("/api/user/new", controllers.CreateAccount)
-	r.Post("/api/user/login", controllers.Authenticate)
-	r.Post("/api/contacts/new", controllers.CreateContact)
-	r.Get("/api/contacts", controllers.GetContactsFor)
+	router.Post("/api/user/new", controllers.CreateAccount)
+	router.Post("/api/user/login", controllers.Authenticate)
+	router.Post("/api/contacts/new", controllers.CreateContact)
+	router.Get("/api/contacts", controllers.GetContacts)
 
-	return r
+	return router
 }

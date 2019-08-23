@@ -24,8 +24,8 @@ var CreateContact = func(w http.ResponseWriter, r *http.Request) {
 	u.Respond(w, resp)
 }
 
-// GetContactsFor - get user contacts
-var GetContactsFor = func(w http.ResponseWriter, r *http.Request) {
+// GetContacts - get user contacts
+var GetContacts = func(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value("user").(uint)
 	data := models.GetContacts(userID)
 	resp := u.Message(true, "success")
