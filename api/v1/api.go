@@ -17,10 +17,10 @@ func NewRouter() http.Handler {
 	router.Use(m.JwtAuthentication)
 
 	// Register the API routes
-	router.Post("/api/user/new", controllers.CreateAccount)
-	router.Post("/api/user/login", controllers.Authenticate)
-	router.Post("/api/contacts/new", controllers.CreateContact)
-	router.Get("/api/contacts", controllers.GetContacts)
+	router.Post("/user/new", controllers.CreateAccount)
+	router.Post("/user/login", controllers.Authenticate)
+	router.Post("/contacts/new", controllers.CreateContact)
+	router.Get("/contacts", controllers.GetContacts)
 
 	return router
 }
