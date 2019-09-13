@@ -66,3 +66,18 @@ func GetContacts(userID uint) []*Contact {
 
 	return contacts
 }
+
+// DeleteContact delete user contact by ID
+func DeleteContact(contactID int, userID uint) map[string]interface{} {
+	contact := &Contact{}
+	err := GetDB().Table("contacts").Where("id = ? AND user_id = ?", contactID, userID).First(contact).Error
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+
+	db.Delete(&contact)
+
+	resp := u.Message(true, "success")
+	return resp
+}
