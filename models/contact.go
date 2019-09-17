@@ -45,9 +45,9 @@ func (c *Contact) Create() map[string]interface{} {
 }
 
 // GetContact return a user contact by ID
-func GetContact(id uint) *Contact {
+func GetContact(contactID int, userID uint) *Contact {
 	contact := &Contact{}
-	err := GetDB().Table("contacts").Where("id = ?", id).First(contact).Error
+	err := GetDB().Table("contacts").Where("id = ? AND user_id = ?", contactID, userID).First(contact).Error
 	if err != nil {
 		return nil
 	}

@@ -36,6 +36,26 @@ var GetContacts = func(w http.ResponseWriter, r *http.Request) {
 	u.Respond(w, resp)
 }
 
+// GetContact - delete user contact
+var GetContact = func(w http.ResponseWriter, r *http.Request) {
+	contactID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	userID := r.Context().Value("user").(uint)
+	data := models.GetContact(contactID, userID)
+	if data == nil {
+		u.Respond(w, u.Message(false, "Contact is not found"))
+		return
+	}
+
+	resp := u.Message(true, "success")
+	resp["data"] = data
+	u.Respond(w, resp)
+}
+
 // DeleteContact - delete user contact
 var DeleteContact = func(w http.ResponseWriter, r *http.Request) {
 	contactID, err := strconv.Atoi(chi.URLParam(r, "id"))
@@ -43,11 +63,13 @@ var DeleteContact = func(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
+
 	userID := r.Context().Value("user").(uint)
 	resp := models.DeleteContact(contactID, userID)
 	if resp == nil {
 		u.Respond(w, u.Message(false, "Contact is not found"))
 		return
 	}
+
 	u.Respond(w, resp)
 }
