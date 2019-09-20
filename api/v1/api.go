@@ -19,7 +19,7 @@ func NewRouter() http.Handler {
 	// Register the API routes
 	router.Post("/user/new", controllers.CreateAccount)
 	router.Post("/user/login", controllers.Authenticate)
-	router.Post("/contacts/new", controllers.CreateContact)
+	router.Post("/contact/new", controllers.CreateContact)
 	router.Get("/contacts", controllers.GetContacts)
 	router.Get("/contact/{id}", controllers.GetContact)
 	router.Put("/contact/{id}", controllers.UpdateContact)
