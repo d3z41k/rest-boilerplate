@@ -22,6 +22,7 @@ func NewRouter() http.Handler {
 	router.Post("/contacts/new", controllers.CreateContact)
 	router.Get("/contacts", controllers.GetContacts)
 	router.Get("/contact/{id}", controllers.GetContact)
+	router.Put("/contact/{id}", controllers.UpdateContact)
 	router.Delete("/contact/{id}", controllers.DeleteContact)
 
 	return router

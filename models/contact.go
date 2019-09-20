@@ -67,6 +67,26 @@ func GetContacts(userID uint) []*Contact {
 	return contacts
 }
 
+// UpdateContact update a user contact by ID
+func UpdateContact(contactData *Contact, contactID int, userID uint) *Contact {
+	contact := &Contact{}
+	err := GetDB().Table("contacts").Where("id = ? AND user_id = ?", contactID, userID).First(contact).Error
+	if err != nil {
+		return nil
+	}
+
+	if contactData.Name != "" {
+		contact.Name = contactData.Name
+	}
+	if contactData.Phone != "" {
+		contact.Phone = contactData.Phone
+	}
+
+	db.Save(contact)
+
+	return contact
+}
+
 // DeleteContact delete user contact by ID
 func DeleteContact(contactID int, userID uint) map[string]interface{} {
 	contact := &Contact{}

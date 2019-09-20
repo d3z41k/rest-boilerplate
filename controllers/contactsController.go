@@ -27,6 +27,26 @@ var CreateContact = func(w http.ResponseWriter, r *http.Request) {
 	u.Respond(w, resp)
 }
 
+// GetContact - get user contact
+var GetContact = func(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value("user").(uint)
+	contactID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	data := models.GetContact(contactID, userID)
+	if data == nil {
+		u.Respond(w, u.Message(false, "Contact is not found"))
+		return
+	}
+
+	resp := u.Message(true, "success")
+	resp["data"] = data
+	u.Respond(w, resp)
+}
+
 // GetContacts - get user contacts
 var GetContacts = func(w http.ResponseWriter, r *http.Request) {
 	userID := r.Context().Value("user").(uint)
@@ -36,16 +56,23 @@ var GetContacts = func(w http.ResponseWriter, r *http.Request) {
 	u.Respond(w, resp)
 }
 
-// GetContact - delete user contact
-var GetContact = func(w http.ResponseWriter, r *http.Request) {
+// UpdateContact - update user contact
+var UpdateContact = func(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value("user").(uint)
+	contactData := &models.Contact{}
 	contactID, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	userID := r.Context().Value("user").(uint)
-	data := models.GetContact(contactID, userID)
+	err = json.NewDecoder(r.Body).Decode(contactData)
+	if err != nil {
+		u.Respond(w, u.Message(false, "Error while decoding request body"))
+		return
+	}
+
+	data := models.UpdateContact(contactData, contactID, userID)
 	if data == nil {
 		u.Respond(w, u.Message(false, "Contact is not found"))
 		return
@@ -58,13 +85,13 @@ var GetContact = func(w http.ResponseWriter, r *http.Request) {
 
 // DeleteContact - delete user contact
 var DeleteContact = func(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value("user").(uint)
 	contactID, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	userID := r.Context().Value("user").(uint)
 	resp := models.DeleteContact(contactID, userID)
 	if resp == nil {
 		u.Respond(w, u.Message(false, "Contact is not found"))
